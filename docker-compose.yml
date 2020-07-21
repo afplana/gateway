@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  gateway_db:
+    image: mysql:5.7
+    networks:
+      - spring-boot-mysql-network
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=gateway
+      - MYSQL_DATABASE=gateway
+
+  gateway_api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - spring-boot-mysql-network
+    depends_on:
+      - gateway_db
+networks:
+  spring-boot-mysql-network:
+    driver: bridge
